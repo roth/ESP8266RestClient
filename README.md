@@ -1,6 +1,6 @@
-# RestClient for Arduino
+# RestClient for ESP8266
 
-HTTP Request library for Arduino and the Ethernet shield.
+HTTP Request library for ESP8266.
 
 # Install
 
@@ -10,17 +10,13 @@ where `~/Documents/Arduino` is your sketchbook directory.
     > cd ~/Documents/Arduino
     > mkdir libraries
     > cd libraries
-    > git clone https://github.com/csquared/arduino-restclient.git RestClient
+    > git clone https://github.com/fabianofranca/ESP8266RestClient.git ESP8266RestClient
 
 # Usage
 
 ### Include
 
-You need to have the `Ethernet` library already included.
-
 ```c++
-#include <Ethernet.h>
-#include <SPI.h>
 #include "RestClient.h"
 ```
 
@@ -38,49 +34,16 @@ Use a local IP and an explicit port:
 RestClient client = RestClient("192.168.1.50",5000);
 ```
 
-### dhcp()
+### begin()
 
-Sets up `EthernetClient` with a mac address of `DEADBEEFFEED`
+Sets up WiFi connection
 
 ```c++
-  client.dhcp()
+  client.begin("ssid", "password");
 ```
 
 Note: you can have multiple RestClient objects but only need to call
 this once.
-
-Note: if you have multiple Arduinos on the same network, you'll need
-to give each one a different mac address.
-
-### begin(byte mac[])
-
-It just wraps the `EthernetClient` call to `begin` and DHCPs.
-Use this if you need to explicitly set the mac address.
-
-```c++
-  byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-  if (client.begin(mac) == 0) {
-     Serial.println("Failed to configure Ethernet using DHCP");
-  }
-```
-
-### Manual Ethernet Setup
-
-You can skip the above methods and just configure the EthernetClient yourself:
-
-```c++
-  byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-  //the IP address for the shield:
-  byte ip[] = { 192, 168, 2, 11 };
-  Ethernet.begin(mac,ip);
-```
-
-```c++
-  byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-  Ethernet.begin(mac);
-```
-
-This is especially useful for debugging network connection issues.
 
 ## RESTful methods
 
@@ -139,7 +102,7 @@ int statusCode = client.del("/", &response);
 
 I test every way of calling the library (against a public heroku app)[https://github.com/csquared/arduino-http-test].
 
-You can find the file in File->Examples->RestClient->full_test_suite
+You can find the file in File->Examples->ESP8266RestClient->full_test_suite
 
 ## Debug Mode
 
@@ -153,6 +116,4 @@ Everything happening in the client will get printed to the Serial port.
 
 # Thanks
 
-[ricardochimal](https://github.com/ricardochimal) For all his c++ help.  Couldn't have done this without you!
-
-[theycallmeswift](https://github.com/theycallmeswift) Helping incept and debug v1.0
+[csquared](https://github.com/csquared) For creating this greate and simple library for Arduino

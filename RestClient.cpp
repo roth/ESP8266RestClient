@@ -22,19 +22,20 @@ RestClient::RestClient(const char* _host, int _port){
   contentType = "application/x-www-form-urlencoded";	// default
 }
 
-void RestClient::dhcp(){
-  byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-  if (begin(mac) == 0) {
-    Serial.println("Failed to configure Ethernet using DHCP");
+int RestClient::begin(const char* ssid, const char* pass) {
+  WiFi.begin(ssid, pass);
+  while (WiFi.status() != WL_CONNECTED) {
+      delay(500);
+      Serial.print(".");
   }
-  //give it time to initialize
-  delay(1000);
-}
 
-int RestClient::begin(byte mac[]){
-  return Ethernet.begin(mac);
-  //give it time to initialize
-  delay(1000);
+  Serial.println("");
+  Serial.print("Connected to ");
+  Serial.println(ssid);
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  return WiFi.status();
 }
 
 // GET path
