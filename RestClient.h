@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
+#include <WiFiClientSecure.h>
 
 class RestClient {
 
@@ -17,6 +18,11 @@ class RestClient {
     void setHeader(const char*);
     // Set Content-Type Header
     void setContentType(const char*);
+
+    //Set to use a secure connection
+    void setSecureConnection(bool secureConn);
+    //Set the fingerprint of SSL certificate to use secure connection
+    void setFingerprint(const char* fingerPrint);
 
     // GET path
     int get(const char*);
@@ -44,11 +50,15 @@ class RestClient {
 
   private:
     WiFiClient client;
+    // Use WiFiClientSecure class to create TLS connection
+    WiFiClientSecure client_s;
     int readResponse(String*);
     void write(const char*);
     const char* host;
     int port;
     int num_headers;
     const char* headers[10];
+    bool use_https;
+    const char* fingerprint;
 	const char* contentType;
 };
