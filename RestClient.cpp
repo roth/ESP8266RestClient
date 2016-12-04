@@ -15,6 +15,7 @@ RestClient::RestClient(const char* _host){
   contentType = "application/x-www-form-urlencoded";	// default
   use_https = false;
   fingerprint = "";
+  check_FingerPrint = true;
 }
 
 RestClient::RestClient(const char* _host, int _port){
@@ -24,6 +25,7 @@ RestClient::RestClient(const char* _host, int _port){
   contentType = "application/x-www-form-urlencoded";	// default
   use_https = false;
   fingerprint = "";
+  check_FingerPrint = true;
 }
 
 int RestClient::begin(const char* ssid, const char* pass) {
@@ -114,6 +116,10 @@ void RestClient::setSecureConnection(bool secureConn){
   use_https = secureConn;
 }
 
+void RestClient::setCheckFingerprint(bool checkFingerPrint){
+  check_FingerPrint = checkFingerPrint;
+}
+
 // Use web browser to view and copy
 // SHA1 fingerprint of the certificate
 // EX: CF 05 98 89 CA FF 8E D8 5E 5C E0 C2 E4 F7 E6 C3 C7 50 DD 5C
@@ -135,11 +141,13 @@ int RestClient::request(const char* method, const char* path,
       return 0;
     }
 
-    if (client_s.verify(fingerprint, host)) {
-      HTTP_DEBUG_PRINT("SSL fingerprint certificate matches!");
-    } else {
-      HTTP_DEBUG_PRINT("SSL fingerprint certificate doesn't match!");
-      return 0;
+    if(check_FingerPrint) {
+      if (client_s.verify(fingerprint, host)) {
+        HTTP_DEBUG_PRINT("SSL fingerprint certificate matches!");
+      } else {
+        HTTP_DEBUG_PRINT("SSL fingerprint certificate doesn't match!");
+        return 0;
+      }
     }
 
   } else {

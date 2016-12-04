@@ -23,6 +23,8 @@ class RestClient {
     void setSecureConnection(bool secureConn);
     //Set the fingerprint of SSL certificate to use secure connection
     void setFingerprint(const char* fingerPrint);
+    //enable/disable fingerprint check
+    void setCheckFingerprint(bool checkFingerPrint);
 
     // GET path
     int get(const char*);
@@ -60,5 +62,6 @@ class RestClient {
     const char* headers[10];
     bool use_https;
     const char* fingerprint;
+    bool check_FingerPrint;
 	const char* contentType;
 };
